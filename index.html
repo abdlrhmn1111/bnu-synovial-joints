@@ -83,6 +83,22 @@ main{position:relative;z-index:1}
 .tg{grid-template-columns:1fr;gap:3vh}.rw{top:0;z-index:3;background:var(--ink);padding:8px 0}.rig{max-height:32svh}
 .hero{bottom:16svh}
 #moves .rw{background:none;height:36svh}#moves .ti{background:rgba(7,19,41,.78)}#types .rig{max-height:16svh}.t3 img{max-height:20svh}}
+/* MCQ QUIZ (before the team names) */
+.quiz{padding-top:12svh;padding-bottom:6svh;border-top:1px solid var(--ln)}
+.quiz h2{font-size:clamp(2rem,4.6vw,4rem);margin-bottom:.4rem}
+.qs{display:grid;gap:3.2rem;margin-top:5vh;max-width:52rem}
+.q h3{font:300 clamp(1.3rem,2.2vw,1.9rem)/1.25 Fraunces,Georgia,serif;letter-spacing:-.01em;margin-bottom:1.1rem}
+.q h3 span{color:var(--cy);font-size:.8em;margin-right:.7rem;letter-spacing:.12em}
+.op{display:grid;gap:.6rem}
+.op button{display:flex;gap:1rem;align-items:baseline;text-align:left;width:100%;background:rgba(7,19,41,.55);border:1px solid var(--ln);border-radius:12px;padding:.8rem 1.1rem;cursor:pointer;color:#c4d3ea;transition:border-color .3s,background .3s,transform .3s}
+.op button b{font-weight:500;color:var(--cy);letter-spacing:.12em}
+.op button:hover:not(:disabled){border-color:var(--cy);transform:translateX(4px)}
+.op button:disabled{cursor:default;color:#c4d3ea;opacity:.75}
+.op button.ok{border-color:#7ef0c4;background:rgba(126,240,196,.12);color:#fff;opacity:1}
+.op button.no{border-color:#ff7b8c;background:rgba(255,123,140,.1);color:#fff;opacity:1}
+.fb{margin-top:.9rem;color:var(--mut);font-size:.95rem;min-height:1.4em}
+.sc{margin-top:.5rem;display:flex;align-items:center;gap:1.4rem;font:300 1.6rem Fraunces,Georgia,serif}
+.sc button{background:none;border:1px solid var(--ln);border-radius:99px;padding:.5rem 1.1rem;cursor:pointer;font:400 .9rem 'Instrument Sans',sans-serif}.sc button:hover{border-color:var(--cy)}
 /* TEAM CREDITS (end of page): names in Fraunces serif, codes in tracked tabular figures */
 .team{padding-top:12svh;padding-bottom:14svh;border-top:1px solid var(--ln)}
 .tk{font-size:.74rem;letter-spacing:.34em;text-transform:uppercase;color:var(--cy);margin-bottom:1rem}
@@ -187,6 +203,8 @@ main{position:relative;z-index:1}
 <figure class="t3" style="margin-top:1.5rem"><div class="cd"><img data-src="mov" alt="Movements of synovial joints"><figcaption>Movements of synovial joints</figcaption></div></figure></div></div></section>
 
 <footer id="end" class="sec end"><h2>Mobility, flexibility, and support for body movement.</h2><button onclick="scrollTo({top:0})">Return to the joint</button></footer>
+<!-- QUIZ: questions are in the script (QZ) -->
+<section id='quiz' class='sec quiz'><p class='tk'>Quiz</p><h2>MCQs: Synovial Joints 🦴</h2><div class='qs' id='qs'></div></section>
 <!-- TEAM: EDIT names and codes here (n = number, nm = name, cx = code; leave the code out if a member has none) -->
 <section id='team' class='sec team'><p class='tk'>Team</p><h2>Presented by</h2><ol class='tm'>
 <li><span class='n'>01</span><span class='nm'>Lamees Mohamed</span><span class='cx'>26010012</span></li>
@@ -373,7 +391,20 @@ list($('#ml'),MOVES,d=>`<p class="pl">${d.p}</p><dl>${d.d.map(([a,b])=>`<dt>${a}
 
 /* progress + chapter indicator after the film */
 addEventListener('scroll',()=>document.documentElement.style.setProperty('--p',scrollY/(document.documentElement.scrollHeight-innerHeight)),{passive:true});
-[['#types','Classification',CH[7]],['#moves','Movements','Classification'],['#end','Summary','Movements'],['#team','Team','Summary']].forEach(([t,n,p])=>ScrollTrigger.create({trigger:t,start:'top 55%',end:'bottom 55%',onEnter:()=>pc(n),onEnterBack:()=>pc(n),onLeaveBack:()=>pc(p)}));
+[['#types','Classification',CH[7]],['#moves','Movements','Classification'],['#end','Summary','Movements'],['#quiz','Quiz','Summary'],['#team','Team','Quiz']].forEach(([t,n,p])=>ScrollTrigger.create({trigger:t,start:'top 55%',end:'bottom 55%',onEnter:()=>pc(n),onEnterBack:()=>pc(n),onLeaveBack:()=>pc(p)}));
 gsap.set('.tm li',{opacity:RM?1:0,y:RM?0:18});
 if(!RM)ScrollTrigger.batch('.tm li',{start:'top 94%',once:true,onEnter:b=>gsap.to(b,{opacity:1,y:0,stagger:.06,duration:.9,ease:'power2.out'})});
+
+/* ===== EDIT: MCQ QUIZ (q = question, o = options A–D, a = index of the correct option 0–3, x = explanation shown after answering) =====
+   CHECK: the answer keys are assumed (B, C, C). Option D of Q3 (C1–C2) is also a synovial pivot joint on your Classification slide, so consider rewording it. */
+const QZ=[
+{q:'What is the main characteristic of a synovial joint?',o:['It does not allow movement.','It allows free movement.','It connects bones with cartilage only.','It has no joint cavity.'],a:1,x:'A synovial joint is a freely movable (diarthrotic) joint.'},
+{q:'What is the function of synovial fluid in a synovial joint?',o:['To produce red blood cells.','To connect muscles to bones.','To reduce friction between the bones.','To prevent all joint movement.'],a:2,x:'The fluid reduces friction, provides nutrition, and cushions the joints.'},
+{q:'Which of the following is an example of a synovial joint?',o:['The joints between the skull bones.','The joint between the teeth and their sockets.','The knee joint.','The joint between the first and second cervical vertebrae (as a whole).'],a:2,x:'Examples of synovial joints: knee, hip, shoulder, and elbow. (C1–C2 is also a synovial pivot joint — see Classification.)'}];
+const qz=$('#qs');
+function qBuild(){let got=0,done=0;
+ qz.innerHTML=QZ.map((d,i)=>`<div class='q'><h3><span>${i+1}.</span>${d.q}</h3><div class='op'>${d.o.map((t,j)=>`<button data-j='${j}'><b>${'ABCD'[j]})</b><span>${t}</span></button>`).join('')}</div><p class='fb'></p></div>`).join('')+`<div class='sc'></div>`;
+ [...qz.querySelectorAll('.q')].forEach((el,i)=>{const bs=[...el.querySelectorAll('button')];bs.forEach(b=>b.onclick=()=>{const d=QZ[i],j=+b.dataset.j;bs.forEach(x=>x.disabled=true);bs[d.a].classList.add('ok');if(j!=d.a)b.classList.add('no');el.querySelector('.fb').textContent=(j==d.a?'Correct. ':'Not quite. ')+d.x;got+=j==d.a?1:0;
+  if(++done==QZ.length){const s=qz.querySelector('.sc');s.innerHTML=`<span>Score: ${got} / ${QZ.length}</span><button>Try again</button>`;s.querySelector('button').onclick=qBuild}})})}
+qBuild();
 </script></body></html>
